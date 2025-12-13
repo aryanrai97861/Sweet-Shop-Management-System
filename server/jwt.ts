@@ -39,16 +39,16 @@ export function verifyToken(token: string): JWTPayload | null {
 
 /**
  * Extract token from Authorization header
- * Supports: "Bearer <token>" or just "<token>"
+ * Only supports: "Bearer <token>" format
  */
 export function extractTokenFromHeader(authHeader: string | undefined): string | null {
   if (!authHeader) return null;
 
-  // Handle "Bearer <token>" format
-  if (authHeader.startsWith("Bearer ")) {
-    return authHeader.substring(7);
+  // Only handle "Bearer <token>" format
+  if (!authHeader.startsWith("Bearer ")) {
+    return null;
   }
 
-  // Handle direct token
-  return authHeader;
+  const token = authHeader.substring(7).trim();
+  return token || null;
 }

@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: (data: AuthResponse) => {
       // Store token in localStorage
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("auth_token", data.token);
       // Update user in cache
       queryClient.setQueryData(["/api/user"], data.user);
     },
@@ -83,13 +83,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: () => {
       // Remove token from localStorage
-      localStorage.removeItem("token");
+      localStorage.removeItem("auth_token");
       // Clear user from cache
       queryClient.setQueryData(["/api/user"], null);
     },
     onError: (error: Error) => {
       // Even on error, clear local auth state
-      localStorage.removeItem("token");
+      localStorage.removeItem("auth_token");
       queryClient.setQueryData(["/api/user"], null);
       
       toast({
@@ -109,7 +109,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loginMutation,
         logoutMutation,
         registerMutation,
-      }}
+        // Backward compatibility for tests
+        login: loginMutation,
+        logout: logoutMutation,
+        register: registerMutation,
+      } as any}
     >
       {children}
     </AuthContext.Provider>

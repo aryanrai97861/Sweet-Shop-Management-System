@@ -39,6 +39,7 @@ export interface IStorage {
   // Transaction operations
   purchaseSweet(userId: number, sweetId: number, quantity: number): Promise<Transaction | undefined>;
   restockSweet(userId: number, sweetId: number, quantity: number): Promise<Sweet | undefined>;
+  getTransactions(): Promise<Transaction[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -182,6 +183,10 @@ export class DatabaseStorage implements IStorage {
     });
 
     return updated;
+  }
+
+  async getTransactions(): Promise<Transaction[]> {
+    return await db.select().from(transactions);
   }
 }
 

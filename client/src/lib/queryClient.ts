@@ -11,7 +11,7 @@ async function throwIfResNotOk(res: Response) {
  * Get auth token from localStorage
  */
 function getAuthToken(): string | null {
-  return localStorage.getItem("token");
+  return localStorage.getItem("auth_token");
 }
 
 /**

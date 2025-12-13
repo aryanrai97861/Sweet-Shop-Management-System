@@ -105,6 +105,10 @@ export async function registerRoutes(
       const userId = req.user!.id;
       const quantity = req.body.quantity || 1;
 
+      if (!quantity || quantity <= 0) {
+        return res.status(400).send("Invalid quantity");
+      }
+
       const transaction = await storage.purchaseSweet(userId, sweetId, quantity);
       if (!transaction) {
         return res.status(400).send("Unable to complete purchase. Sweet may be out of stock.");
@@ -133,6 +137,16 @@ export async function registerRoutes(
       res.json(sweet);
     } catch (error) {
       res.status(500).send("Failed to restock sweet");
+    }
+  });
+
+  // Get all transactions (admin only)
+  app.get("/api/transactions", requireAdmin, async (req, res) => {
+    try {
+      const transactions = await storage.getTransactions();
+      res.json(transactions);
+    } catch (error) {
+      res.status(500).send("Failed to fetch transactions");
     }
   });
 
