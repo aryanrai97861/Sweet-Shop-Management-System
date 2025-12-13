@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     onSuccess: (data: AuthResponse) => {
       // Store token in localStorage
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("auth_token", data.token);
       // Update user in cache
       queryClient.setQueryData(["/api/user"], data.user);
     },

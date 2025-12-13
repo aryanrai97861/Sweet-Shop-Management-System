@@ -111,6 +111,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteSweet(id: number): Promise<boolean> {
+    // First, delete all related transactions
+    await db.delete(transactions).where(eq(transactions.sweetId, id));
+    
+    // Then delete the sweet
     const result = await db.delete(sweets).where(eq(sweets.id, id)).returning();
     return result.length > 0;
   }
