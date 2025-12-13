@@ -58,8 +58,8 @@ export async function registerRoutes(
     }
   });
 
-  // Create sweet (admin only)
-  app.post("/api/sweets", requireAdmin, async (req, res) => {
+  // Create sweet (protected)
+  app.post("/api/sweets", requireAuth, async (req, res) => {
     try {
       const data = insertSweetSchema.parse(req.body);
       const sweet = await storage.createSweet(data);
@@ -69,8 +69,8 @@ export async function registerRoutes(
     }
   });
 
-  // Update sweet (admin only)
-  app.put("/api/sweets/:id", requireAdmin, async (req, res) => {
+  // Update sweet (protected)
+  app.put("/api/sweets/:id", requireAuth, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const data = updateSweetSchema.parse(req.body);

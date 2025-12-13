@@ -92,7 +92,7 @@ describe('Sweet Shop API Routes', () => {
   });
 
   describe('POST /api/sweets', () => {
-    it('should allow admin to create a sweet', async () => {
+    it('should allow authenticated user to create a sweet', async () => {
       const newSweet = {
         name: `TestSweet_${Date.now()}`,
         category: 'Candy',
@@ -112,11 +112,11 @@ describe('Sweet Shop API Routes', () => {
       expect(response.body.category).toBe(newSweet.category);
     });
 
-    it('should reject non-admin user from creating sweets', async () => {
+    it('should allow regular user to create sweets', async () => {
       const newSweet = {
         name: 'TestSweet',
         category: 'Candy',
-        price: 5.99,
+        price: '5.99',
         quantity: 100,
       };
 
@@ -125,7 +125,8 @@ describe('Sweet Shop API Routes', () => {
         .set('Authorization', `Bearer ${userToken}`)
         .send(newSweet);
 
-      expect(response.status).toBe(403);
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty('id');
     });
 
     it('should reject creation without authentication', async () => {
@@ -178,14 +179,14 @@ describe('Sweet Shop API Routes', () => {
       expect(sweetId).toBeDefined();
     });
 
-    it.skip('should allow admin to update a sweet', async () => {
+    it.skip('should allow authenticated user to update a sweet', async () => {
       const updates = {
         name: 'Updated Name',
         price: '6.99',
       };
 
       const response = await request(app)
-        .patch(`/api/sweets/${sweetId}`)
+        .put(`/api/sweets/${sweetId}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .send(updates);
 
@@ -194,18 +195,18 @@ describe('Sweet Shop API Routes', () => {
       expect(response.body.price).toBe('6.99');
     });
 
-    it.skip('should reject non-admin from updating', async () => {
+    it.skip('should allow regular user to update sweets', async () => {
       const response = await request(app)
-        .patch(`/api/sweets/${sweetId}`)
+        .put(`/api/sweets/${sweetId}`)
         .set('Authorization', `Bearer ${userToken}`)
         .send({ name: 'Updated' });
 
-      expect(response.status).toBe(403);
+      expect(response.status).toBe(200);
     });
 
     it('should return 404 for non-existent sweet', async () => {
       const response = await request(app)
-        .patch('/api/sweets/999999')
+        .put('/api/sweets/999999')
         .set('Authorization', `Bearer ${adminToken}`)
         .send({ name: 'Updated' });
 

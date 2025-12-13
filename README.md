@@ -24,19 +24,19 @@ A full-stack web application for managing a sweet shop inventory with role-based
 - User registration and login with password hashing
 - Protected routes requiring authentication
 
-### Sweet Management (Admin Only)
+### Sweet Management (All Authenticated Users)
 - Create new sweets with name, category, price, quantity, and description
 - Update existing sweet details
-- Delete sweets from inventory
-- Restock sweets with quantity tracking
-- View all transactions
-
-### Customer Features
 - Browse available sweets
 - Search sweets by name
 - Filter sweets by category and availability
 - Purchase sweets (with automatic stock updates)
 - View detailed sweet information
+
+### Admin-Only Features
+- **Delete sweets** from inventory
+- **Restock sweets** with quantity tracking
+- **View all transactions** across the system
 
 ### Real-time Features
 - Live inventory updates
@@ -319,7 +319,7 @@ Response: 200 OK
 ["Candy", "Chocolate", "Gummies", "Pastry"]
 ```
 
-#### Create Sweet (Admin Only)
+#### Create Sweet (Protected)
 ```http
 POST /api/sweets
 Authorization: Bearer <token>
@@ -337,9 +337,9 @@ Content-Type: application/json
 Response: 201 Created
 ```
 
-#### Update Sweet (Admin Only)
+#### Update Sweet (Protected)
 ```http
-PATCH /api/sweets/:id
+PUT /api/sweets/:id
 Authorization: Bearer <token>
 Content-Type: application/json
 
