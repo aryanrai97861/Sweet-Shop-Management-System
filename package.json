@@ -10,6 +10,7 @@
     "check": "tsc",
     "db:push": "dotenv -e .env -- drizzle-kit push",
     "db:seed": "tsx seed.ts",
+    "db:cleanup": "tsx cleanup.ts",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage"
